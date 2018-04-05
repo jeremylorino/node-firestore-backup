@@ -114,7 +114,8 @@ var constructDocumentValue = exports.constructDocumentValue = function construct
 
 var defaultBackupOptions = {
   databaseStartPath: '',
-  requestCountLimit: 1
+  requestCountLimit: 1,
+  exclude: []
 };
 
 var FirestoreBackup = exports.FirestoreBackup = function () {
@@ -132,6 +133,14 @@ var FirestoreBackup = exports.FirestoreBackup = function () {
     key: 'backup',
     value: function backup() {
       var _this = this;
+
+      console.log('Starting backup...');
+      if (this.options.databaseStartPath) {
+        console.log('Using start path \'', this.options.databaseStartPath, '\'');
+      }
+      if (this.options.exclude && this.options.exclude.length > 0) {
+        console.log('Excluding ', this.options.exclude);
+      }
 
       if ((0, _types.isDocumentPath)(this.options.databaseStartPath)) {
         var databaseDocument = this.options.database.doc(this.options.databaseStartPath);
@@ -154,6 +163,9 @@ var FirestoreBackup = exports.FirestoreBackup = function () {
 
       return this.options.database.getCollections().then(function (collections) {
         return (0, _utility.promiseParallel)(collections, function (collection) {
+          if (_this2.options.exclude.includes(collection.id)) {
+            return Promise.resolve();
+          }
           return _this2.backupCollection(collection, _this2.options.backupPath + '/' + collection.id, '/');
         }, 1);
       });

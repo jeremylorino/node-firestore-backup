@@ -12,7 +12,7 @@ import {
   isDocumentPath,
   isCollectionPath
 } from './types'
-import type { ValueDescription, Validator, BackupOptions } from './types'
+import type { ValueDescription, Validator, FirestoreBackupOptions } from './types'
 import { promiseParallel } from './utility'
 
 import fs from 'fs'
@@ -118,15 +118,16 @@ export const constructDocumentValue = (documentDataToStore: Object = {}, keys: A
 
 const defaultBackupOptions = {
   databaseStartPath: '',
-  requestCountLimit: 1
+  requestCountLimit: 1,
+  exclude: []
 }
 
 export class FirestoreBackup {
-  options: BackupOptions;
+  options: FirestoreBackupOptions;
 
   documentRequestLimit: number;
 
-  constructor(options: BackupOptions) {
+  constructor(options: FirestoreBackupOptions) {
     this.options = Object.assign({}, defaultBackupOptions, options)
 
     if (this.options.requestCountLimit > 1) {
@@ -135,6 +136,14 @@ export class FirestoreBackup {
   }
 
   backup() {
+    console.log('Starting backup...')
+    if (this.options.databaseStartPath) {
+      console.log('Using start path \'', this.options.databaseStartPath, '\'')
+    }
+    if (this.options.exclude && this.options.exclude.length > 0) {
+      console.log('Excluding ', this.options.exclude)
+    }
+
     if (isDocumentPath(this.options.databaseStartPath)) {
       const databaseDocument = this.options.database.doc(this.options.databaseStartPath)
       return databaseDocument.get()
@@ -155,6 +164,9 @@ export class FirestoreBackup {
     return this.options.database.getCollections()
       .then((collections) => {
         return promiseParallel(collections, (collection) => {
+          if (this.options.exclude.includes(collection.id)) {
+            return Promise.resolve()
+          }
           return this.backupCollection(collection, this.options.backupPath + '/' + collection.id, '/')
         }, 1)
       })

@@ -5,6 +5,7 @@
 var commander = require('commander')
 var colors = require('colors')
 
+// $FlowFixMe - TODO: 'process' is available in node, look into why this is failing
 var process = require('process')
 var fs = require('fs')
 
@@ -23,12 +24,21 @@ var databaseStartPathParamDescription = 'The database collection or document pat
 var requestCountLimitParamKey = 'requestCountLimit'
 var requestCountLimitParamDescription = 'The maximum number of requests to be made in parallel.'
 
-commander.version('1.0.1')
+var excludeParamKey = 'excludeCollections'
+var excludeParamDescription = 'Collection id(s) to exclude from backing up.'
+
+const collectAllValues = (addValue/*: string */, toValues/*: Array<string> */)/*: Array<string> */ => {
+  toValues.push(addValue)
+  return toValues
+}
+
+commander.version('2.2.0')
   .option('-a, --' + accountCredentialsPathParamKey + ' <path>', accountCredentialsPathParamDescription)
   .option('-B, --' + backupPathParamKey + ' <path>', backupPathParamDescription)
   .option('-P, --' + prettyPrintParamKey, prettyPrintParamDescription)
   .option('-S, --' + databaseStartPathParamKey + ' <path>', databaseStartPathParamDescription)
   .option('-L, --' + requestCountLimitParamKey + ' <number>', requestCountLimitParamDescription)
+  .option('-E, --' + excludeParamKey + ' <path>', excludeParamDescription, collectAllValues, [])
   .parse(process.argv)
 
 const accountCredentialsPath = commander[accountCredentialsPathParamKey]
@@ -57,6 +67,8 @@ const databaseStartPath = (commander[databaseStartPathParamKey] || '').replace(/
 
 const requestCountLimit = parseInt(commander[requestCountLimitParamKey] || '1', 10)
 
+const exclude = commander[excludeParamKey] || []
+
 var firestoreBackup = require('../dist/index.js')
 try {
   console.time('backuptime')
@@ -65,7 +77,8 @@ try {
     databaseStartPath,
     backupPath,
     prettyPrintJSON,
-    requestCountLimit
+    requestCountLimit,
+    exclude
   })
     .then(() => {
       console.log(colors.bold(colors.green('All done 💫')))

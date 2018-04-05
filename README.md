@@ -56,8 +56,34 @@ Example:
 firestore-backup --accountCredentials path/to/credentials/file.json --backupPath /backups/myDatabase --prettyPrint
 ```
 
+### Backup from a starting path:
+* `-S`, `--databaseStartPath` `<path>` - The database collection or document path to begin backup.
+
+Example:
+```sh
+firestore-backup --accountCredentials path/to/credentials/file.json --backupPath /backups/myDatabase --databaseStartPath /myCollection/document_3
+```
+
+### Limit number of requests:
+* `-L`, `--requestCountLimit` `<number>` - The maximum number of requests to be made in parallel.
+
+Example:
+```sh
+firestore-backup --accountCredentials path/to/credentials/file.json --backupPath /backups/myDatabase --requestCountLimit 2
+```
+
+### Exclude collections from backup:
+* `-E`, `--excludeCollections` `<id>` - Collection id(s) to exclude from backing up.
+
+_Note_: because of how the command line parsing library works multiple collection ids must be specified as separate parameters.
+
+Example:
+```sh
+firestore-backup --accountCredentials path/to/credentials/file.json --backupPath /backups/myDatabase --excludeCollections myFirstAnnoyingCollection --excludeCollections mySecondAnnoyingCollection
+```
+
 ### Relax:
 That's it! ✨🌈
 
 ## Contributions
-Feel free to report bugs and make feature requests in the [Issue Tracker](https://github.com/steadyequipment/node-firestore-backup/issues), fork and create pull requests!
+This project has been made much better by it's [contributors](https://github.com/steadyequipment/node-firestore-backup/graphs/contributors), feel free to report bugs and make feature requests in the [Issue Tracker](https://github.com/steadyequipment/node-firestore-backup/issues), fork and create pull requests!
