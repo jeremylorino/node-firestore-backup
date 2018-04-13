@@ -9,8 +9,15 @@ import flatMap from 'array.prototype.flatmap'
 flatMap.shim()
 
 import { FirestoreBackup } from './firestore'
-import type { BackupOptions } from './types'
-import { getSegments } from './utility'
+
+export type BackupOptions = {|
+  accountCredentials: string | Object,
+  backupPath: string,
+  databaseStartPath: string,
+  prettyPrintJSON: boolean,
+  requestCountLimit: number,
+  exclude: Array<string>
+|}
 
 export default function(_options: BackupOptions) {
   const options = Object.assign({}, _options, { databaseStartPath: '' })
