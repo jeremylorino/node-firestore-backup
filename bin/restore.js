@@ -3,38 +3,39 @@
 /* @flow */
 
 /*require('@google-cloud/profiler').start({
+  projectId: 'jal-events',
   serviceContext: {
     service: 'firestore-backup',
-    version: '2.0.0'
+    version: '2.2.0'
   },
   logLevel: 4,
-  timeIntervalMicros: 50
+  timeIntervalMicros: 10
 });*/
 
-var commander = require('commander')
-var colors = require('colors')
+const commander = require('commander')
+const colors = require('colors')
 
 // $FlowFixMe - TODO: 'process' is available in node, look into why this is failing
-var process = require('process')
-var fs = require('fs')
+const process = require('process')
+const fs = require('fs')
 
-var accountCredentialsPathParamKey = 'accountCredentials'
-var accountCredentialsPathParamDescription = 'Google Cloud account credentials JSON file'
+const accountCredentialsPathParamKey = 'accountCredentials'
+const accountCredentialsPathParamDescription = 'Google Cloud account credentials JSON file'
 
-var backupPathParamKey = 'backupPath'
-var backupPathParamDescription = 'Path to store backup.'
+const backupPathParamKey = 'backupPath'
+const backupPathParamDescription = 'Path to backup to be restored.'
 
-var prettyPrintParamKey = 'prettyPrint'
-var prettyPrintParamDescription = 'JSON backups done with pretty-printing.'
+const prettyPrintParamKey = 'prettyPrint'
+const prettyPrintParamDescription = 'JSON backups done with pretty-printing.'
 
-var databaseStartPathParamKey = 'databaseStartPath'
-var databaseStartPathParamDescription = 'The database collection or document path to begin backup.'
+const databaseStartPathParamKey = 'databaseStartPath'
+const databaseStartPathParamDescription = 'The database collection or document path to begin backup.'
 
-var requestCountLimitParamKey = 'requestCountLimit'
-var requestCountLimitParamDescription = 'The maximum number of requests to be made in parallel.'
+const requestCountLimitParamKey = 'requestCountLimit'
+const requestCountLimitParamDescription = 'The maximum number of requests to be made in parallel.'
 
-var excludeParamKey = 'excludeCollections'
-var excludeParamDescription = 'Collection id(s) to exclude from backing up.'
+const excludeParamKey = 'excludeCollections'
+const excludeParamDescription = 'Collection id(s) to exclude from backing up.'
 
 const collectAllValues = (addValue/*: string */, toValues/*: Array<string> */)/*: Array<string> */ => {
   toValues.push(addValue)
@@ -78,10 +79,11 @@ const requestCountLimit = parseInt(commander[requestCountLimitParamKey] || '1', 
 
 const exclude = commander[excludeParamKey] || []
 
-var firestoreBackup = require('../dist/index.js')
+const client = require('../dist/index.js');
+
 try {
-  console.time('backuptime')
-  firestoreBackup.backup({
+  console.time('restoretime')
+  client.restore({
     accountCredentials: accountCredentialsPath,
     databaseStartPath,
     backupPath,
@@ -91,9 +93,10 @@ try {
   })
     .then(() => {
       console.log(colors.bold(colors.green('All done 💫')))
-      console.timeEnd('backuptime')
+      console.timeEnd('restoretime')
     })
 } catch (error) {
   console.log(colors.red(error))
+  console.timeEnd('restoretime')
   process.exit(1)
 }

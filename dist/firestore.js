@@ -167,7 +167,7 @@ var FirestoreBackup = exports.FirestoreBackup = function () {
             return Promise.resolve();
           }
           return _this2.backupCollection(collection, _this2.options.backupPath + '/' + collection.id, '/');
-        }, 1);
+        }, 3);
       });
     }
   }, {

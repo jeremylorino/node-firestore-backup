@@ -3,11 +3,24 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isCollectionPath = exports.isDocumentPath = exports.isReference = exports.isDate = exports.isBoolean = exports.isUndefined = exports.isNull = exports.isFunction = exports.isObject = exports.isArray = exports.isNumber = exports.isString = undefined;
+exports.isCollectionPath = exports.isDocumentPath = exports.isReference = exports.isDate = exports.isBoolean = exports.isUndefined = exports.isNull = exports.isFunction = exports.isObject = exports.isArray = exports.isNumber = exports.isString = exports.TYPES = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _utility = require('./utility');
+
+var TYPES = exports.TYPES = {
+  STRING: 'string',
+  NUMBER: 'number',
+  BOOLEAN: 'boolean',
+  OBJECT: 'object',
+  ARRAY: 'array',
+  NULL: 'null',
+  TIMESTAMP: 'timestamp',
+  DATE: 'date',
+  GEOPOINT: 'geopoint',
+  DOCUMENT_REFERENCE: 'reference'
+};
 
 // Returns if a value is a string
 var isString = exports.isString = function isString(value) {

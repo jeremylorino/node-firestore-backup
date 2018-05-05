@@ -16,16 +16,20 @@
   "main": "./dist/index.js",
   "scripts": {
     "bin": "./bin/firestore-backup.js",
+    "restore": "./bin/restore.js --accountCredentials $GOOGLE_APPLICATION_CREDENTIALS --backupPath ./backup --prettyPrint --requestCountLimit 20",
+    "prerestore": "npm run clean-build",
     "test": "rm -rf ./backup && ./bin/firestore-backup.js --accountCredentials $GOOGLE_APPLICATION_CREDENTIALS --backupPath ./backup --prettyPrint --requestCountLimit 20",
-    "pretest": "npm run build",
+    "pretest": "npm run clean-build",
     "clean": "rm -rf dist && mkdir dist",
     "buildSource": "babel lib --out-dir dist",
     "buildFlow": "flow-copy-source lib dist",
-    "build": "npm run buildSource; npm run buildFlow",
-    "prepublishOnly": "npm run clean && npm run build"
+    "build": "npm run buildSource && npm run buildFlow",
+    "clean-build": "npm run clean && npm run build",
+    "prepublishOnly": "npm run clean-build"
   },
   "bin": "./bin/firestore-backup.js",
   "dependencies": {
+    "array.prototype.flatmap": "^1.2.1",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
@@ -36,8 +40,10 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
+    "@google-cloud/profiler": "^0.1.14",
     "babel-eslint": "7",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "eslint": "3.x",
     "eslint-plugin-flowtype": "^2.46.3",
     "flow-bin": "^0.61.0",

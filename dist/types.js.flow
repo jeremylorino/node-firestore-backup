@@ -2,6 +2,19 @@
 
 import { getSegments } from './utility'
 
+export const TYPES = {
+  STRING: 'string',
+  NUMBER: 'number',
+  BOOLEAN: 'boolean',
+  OBJECT: 'object',
+  ARRAY: 'array',
+  NULL: 'null',
+  TIMESTAMP: 'timestamp',
+  DATE: 'date',
+  GEOPOINT: 'geopoint',
+  DOCUMENT_REFERENCE: 'reference'
+}
+
 export type ValueDescription = {
   value: any,
   type: string
@@ -11,7 +24,7 @@ export type ValidationResult = ValueDescription | false;
 
 export type Validator = (value: any) => ValidationResult;
 
-export type FirestoreBackupOptions = {|
+export type FirestoreOptions = {|
   accountCredentials: string | Object,
   database: Object,
   backupPath: string,
@@ -20,6 +33,10 @@ export type FirestoreBackupOptions = {|
   requestCountLimit: number,
   exclude: Array<string>
 |}
+
+export type FirestoreBackupOptions = FirestoreOptions
+
+export type FirestoreRestoreOptions = FirestoreOptions
 
 // Returns if a value is a string
 export const isString = (value: any): ValidationResult => {
