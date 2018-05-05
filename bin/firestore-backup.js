@@ -2,6 +2,15 @@
 
 /* @flow */
 
+/*require('@google-cloud/profiler').start({
+  serviceContext: {
+    service: 'firestore-backup',
+    version: '2.0.0'
+  },
+  logLevel: 4,
+  timeIntervalMicros: 50
+});*/
+
 var commander = require('commander')
 var colors = require('colors')
 
@@ -72,7 +81,7 @@ const exclude = commander[excludeParamKey] || []
 var firestoreBackup = require('../dist/index.js')
 try {
   console.time('backuptime')
-  firestoreBackup.default({
+  firestoreBackup.backup({
     accountCredentials: accountCredentialsPath,
     databaseStartPath,
     backupPath,
