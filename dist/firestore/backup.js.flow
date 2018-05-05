@@ -11,9 +11,9 @@ import {
   isReference,
   isDocumentPath,
   isCollectionPath
-} from './types'
-import type { ValueDescription, Validator, FirestoreBackupOptions } from './types'
-import { promiseParallel } from './utility'
+} from '../types'
+import type { ValueDescription, Validator, FirestoreBackupOptions } from '../types'
+import { promiseParallel } from '../utility'
 
 import fs from 'fs'
 import mkdirp from 'mkdirp'

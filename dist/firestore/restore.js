@@ -23,7 +23,7 @@ var _firebaseAdmin2 = _interopRequireDefault(_firebaseAdmin);
 
 var _utility = require('./utility');
 
-var _types = require('./types');
+var _types = require('../types');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

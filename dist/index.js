@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.restore = exports.backup = undefined;
+exports.restore = exports.backup = exports.FirestoreRestore = exports.FirestoreBackup = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -31,14 +31,16 @@ var _types = require('./types');
 
 var _firestore = require('./firestore');
 
-var _restore = require('./restore');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _arrayPrototype2.default.shim();
 
+exports.FirestoreBackup = _firestore.FirestoreBackup;
+exports.FirestoreRestore = _firestore.FirestoreRestore;
+
+
 function processOptions(_options) {
-  var options = Object.assign({}, _options, { databaseStartPath: '' });
+  var options = Object.assign({ databaseStartPath: '' }, _options);
 
   var accountCredentialsContents = void 0;
   if (typeof options.accountCredentials === 'string') {
@@ -78,6 +80,6 @@ var backup = exports.backup = function backup(_options) {
 
 var restore = exports.restore = function restore(_options) {
   var options = processOptions(_options);
-  var client = new _restore.FirestoreRestore(options);
+  var client = new _firestore.FirestoreRestore(options);
   return client.restore();
 };

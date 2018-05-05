@@ -10,11 +10,12 @@ flatMap.shim()
 
 import { FirestoreOptions, FirestoreBackupOptions, FirestoreRestoreOptions } from './types'
 
-import { FirestoreBackup } from './firestore'
-import { FirestoreRestore } from './restore'
+import { FirestoreBackup, FirestoreRestore } from './firestore'
+
+export { FirestoreBackup, FirestoreRestore }
 
 function processOptions(_options: FirestoreOptions) {
-  const options = Object.assign({}, _options, { databaseStartPath: '' })
+  const options = Object.assign({databaseStartPath: ''}, _options)
 
   let accountCredentialsContents: Object
   if (typeof options.accountCredentials === 'string') {
